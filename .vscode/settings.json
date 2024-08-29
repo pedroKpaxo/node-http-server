@@ -1,0 +1,11 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "python.sortImports": "explicit",
+        "source.fixAll.flake8": "explicit"
+    },
+    "flake8.interpreter": [
+        "python3"
+    ],
+}
