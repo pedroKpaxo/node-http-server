@@ -1,11 +1,13 @@
 import http from 'http';
 import fs from 'fs';
+import path from 'path';
 import EventEmitter from 'events';
 
 export class Server {
     protected readonly port = 3000;
     protected readonly eventEmitter: EventEmitter;
     protected readonly server: http.Server;
+    protected readonly pagesFolder = path.join(__dirname, 'pages');
 
     constructor() {
         this.eventEmitter = new EventEmitter();
@@ -33,16 +35,16 @@ export class Server {
      */
     protected requestHandler(req: http.IncomingMessage, res: http.ServerResponse): void {
         this.eventEmitter.emit('log', `Received request for: ${req.url}`);
-        try{
+        try {
 
             if (req.url === '/' && req.method === 'GET') {
-                this.serveFile('src/pages/index.html', 'text/html', res);
+                this.serveFile(`${this.pagesFolder}/index.html`, 'text/html', res);
             } else if (req.url === '/about' && req.method === 'GET') {
-                this.serveFile('src/pages/about.html', 'text/html', res);
+                this.serveFile(`${this.pagesFolder}/about.html`, 'text/html', res);
             } else {
-                this.serveFile('src/pages/404.html', 'text/html', res, 404);
+                this.serveFile(`${this.pagesFolder}/404.html`, 'text/html', res, 404);
             }
-        } catch  {
+        } catch {
             this.eventEmitter.emit('error', `Failed to handle request: ${req.url}`);
             res.writeHead(500, { 'Content-Type': 'text/plain' });
             res.end('Internal Server Error');
